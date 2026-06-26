@@ -14,12 +14,31 @@ const components: Components = {
       <div>{children}</div>
     </blockquote>
   ),
+  table: ({ children }) => (
+    <div className="prose-table" role="region" aria-label="Data table" tabIndex={0}>
+      <table>{children}</table>
+    </div>
+  ),
 };
+
+function isMarkdownTableBlock(block: string) {
+  const lines = block
+    .trim()
+    .split(/\r?\n/)
+    .map((line) => line.trim());
+
+  return (
+    lines.length >= 2 &&
+    lines[0].includes("|") &&
+    /^\|?\s*:?-{3,}:?\s*(\|\s*:?-{3,}:?\s*)+\|?$/.test(lines[1])
+  );
+}
 
 function isPlainParagraphBlock(block: string) {
   const trimmed = block.trim();
   return (
     trimmed.length > 0 &&
+    !isMarkdownTableBlock(trimmed) &&
     !/^(#{1,6}\s|[-*+]\s|\d+\.\s|>\s|```|---+$)/.test(trimmed)
   );
 }

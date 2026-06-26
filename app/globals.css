@@ -1203,6 +1203,46 @@ a.lesson-link:hover {
   margin: 0;
 }
 
+.prose-table {
+  max-width: 72ch;
+  margin: 1.8rem 0;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--paper);
+}
+
+.prose-table table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.prose-table th,
+.prose-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.prose-table th {
+  color: var(--ink);
+  background: var(--gold-wash);
+  font-weight: 700;
+}
+
+.prose-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.prose-table th[align="right"],
+.prose-table td[align="right"] {
+  text-align: right;
+}
+
 .prose hr {
   margin: 3.5rem 0;
   border: 0;
@@ -1410,6 +1450,67 @@ a.lesson-link:hover {
   color: var(--ink-soft);
 }
 
+.comparison-grid {
+  max-width: 860px;
+  margin: 1.45rem 0 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.comparison-card {
+  min-width: 0;
+  padding: clamp(1rem, 2.5vw, 1.35rem);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.comparison-card h3 {
+  margin: 0 0 0.85rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-family: var(--font-serif), serif;
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  font-weight: 650;
+  letter-spacing: 0;
+  line-height: 1.15;
+}
+
+.comparison-card .prose {
+  font-size: 0.95rem;
+  line-height: 1.62;
+}
+
+.comparison-card .prose > * {
+  max-width: none;
+}
+
+.comparison-card .prose ul,
+.comparison-card .prose ol {
+  margin: 0.9rem 0 0;
+}
+
+.comparison-card .prose p:first-child {
+  margin-top: 0;
+}
+
+.comparison-prompt {
+  max-width: 760px;
+  margin-top: 1.2rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.comparison-prompt .prose {
+  color: var(--ink-soft);
+}
+
+.lesson-block--comparison {
+  max-width: 860px;
+}
+
 .lesson-block--think {
   max-width: 660px;
   margin-inline: auto;
@@ -1553,6 +1654,21 @@ a.lesson-link:hover {
 
 .lesson-block--watchlist .lesson-block__kicker {
   color: var(--red);
+}
+
+.lesson-block--challenge {
+  max-width: 860px;
+  padding: clamp(1.3rem, 3vw, 2rem);
+  border: 1px solid color-mix(in srgb, var(--gold) 32%, var(--line));
+  background: var(--surface);
+}
+
+.lesson-block--challenge h2 {
+  color: var(--ink);
+}
+
+.lesson-block--challenge > .prose {
+  max-width: 720px;
 }
 
 .lesson-block--fact {
@@ -2191,9 +2307,18 @@ a.lesson-link:hover {
   .lesson-block--mental,
   .lesson-block--wall-street,
   .lesson-block--case,
+  .lesson-block--challenge,
   .lesson-block--watchlist,
   .lesson-block--ahead {
     padding: 1.25rem;
+  }
+
+  .comparison-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .comparison-card {
+    padding: 1rem;
   }
 
   .lesson-mobile-context,

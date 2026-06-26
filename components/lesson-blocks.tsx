@@ -85,15 +85,21 @@ export function ImportantNote({ children, title }: { children: string; title: st
 }
 
 export function CoreLesson({ children, title }: { children: string; title: string }) {
+  const comparison = parseComparisonSections(children, { exactSectionCount: 2 });
+
   return (
     <BlockShell
-      className="lesson-block--core"
+      className={`lesson-block--core ${comparison ? "lesson-block--comparison" : ""}`}
       icon={<ScrollText aria-hidden="true" />}
       label="Core lesson"
       showKicker={false}
       title={title}
     >
-      <MarkdownRenderer content={children} compact editorial />
+      {comparison ? (
+        <ComparisonLayout comparison={comparison} />
+      ) : (
+        <MarkdownRenderer content={children} compact editorial />
+      )}
     </BlockShell>
   );
 }
@@ -171,6 +177,140 @@ export function ApplicationBlock({ children, title }: { children: string; title:
       title={title}
     >
       <MarkdownRenderer content={children} compact editorial />
+    </BlockShell>
+  );
+}
+
+type ComparisonContent = {
+  intro: string;
+  sections: Array<{
+    title: string;
+    body: string;
+  }>;
+  prompt: string;
+};
+
+const comparisonPromptPattern =
+  /^(After .+?:|During\b|If you\b|Should\b|Who\b|Would\b|Which\b|There is\b)/im;
+
+function parseSubheadings(markdown: string) {
+  const headings = [...markdown.matchAll(/^###\s+(.+?)\s*$/gm)].map((match) => ({
+    title: match[1].trim(),
+    index: match.index ?? 0,
+    end: (match.index ?? 0) + match[0].length,
+  }));
+
+  if (headings.length < 2) return null;
+
+  const intro = markdown.slice(0, headings[0].index).trim();
+  let prompt = "";
+  const sections = headings.map((heading, index) => {
+    const next = headings[index + 1];
+    let body = markdown.slice(heading.end, next?.index).trim();
+
+    if (!next) {
+      const promptMatch = comparisonPromptPattern.exec(body);
+      if (promptMatch) {
+        prompt = body.slice(promptMatch.index).trim();
+        body = body.slice(0, promptMatch.index).trim();
+      }
+    }
+
+    return {
+      title: heading.title,
+      body,
+    };
+  });
+
+  return { intro, sections, prompt };
+}
+
+function parseBareLabelComparison(markdown: string) {
+  const labelPattern = /^(Country\s+[A-Z])\s*$/gim;
+  const labels = [...markdown.matchAll(labelPattern)].map((match) => ({
+    title: match[1].trim(),
+    index: match.index ?? 0,
+    end: (match.index ?? 0) + match[0].length,
+  }));
+
+  if (labels.length < 2) return null;
+
+  const intro = markdown.slice(0, labels[0].index).trim();
+  let prompt = "";
+  const sections = labels.map((label, index) => {
+    const next = labels[index + 1];
+    let body = markdown.slice(label.end, next?.index).trim();
+
+    if (!next) {
+      const promptMatch = comparisonPromptPattern.exec(body);
+      if (promptMatch) {
+        prompt = body.slice(promptMatch.index).trim();
+        body = body.slice(0, promptMatch.index).trim();
+      }
+    }
+
+    return {
+      title: label.title,
+      body,
+    };
+  });
+
+  return { intro, sections, prompt };
+}
+
+function parseComparisonSections(
+  markdown: string,
+  options: { exactSectionCount?: number } = {},
+): ComparisonContent | null {
+  const comparison = parseSubheadings(markdown) ?? parseBareLabelComparison(markdown);
+
+  if (
+    !comparison ||
+    (options.exactSectionCount && comparison.sections.length !== options.exactSectionCount)
+  ) {
+    return null;
+  }
+
+  return comparison;
+}
+
+function ComparisonLayout({ comparison }: { comparison: ComparisonContent }) {
+  return (
+    <>
+      {comparison.intro ? <MarkdownRenderer content={comparison.intro} compact editorial /> : null}
+      <div className="comparison-grid">
+        {comparison.sections.map((section) => (
+          <section className="comparison-card" key={section.title}>
+            <h3>{section.title}</h3>
+            <MarkdownRenderer content={section.body} compact />
+          </section>
+        ))}
+      </div>
+      {comparison.prompt ? (
+        <div className="comparison-prompt">
+          <MarkdownRenderer content={comparison.prompt} compact editorial />
+        </div>
+      ) : null}
+    </>
+  );
+}
+
+export function ChallengeExercise({ children, title }: { children: string; title: string }) {
+  const comparison = parseComparisonSections(children);
+
+  return (
+    <BlockShell
+      className="lesson-block--challenge"
+      icon={<ListChecks aria-hidden="true" />}
+      label="Challenge"
+      showKicker={false}
+      title={title}
+    >
+      {comparison ? (
+        <ComparisonLayout comparison={comparison} />
+      ) : (
+        <MarkdownRenderer content={children} compact editorial />
+      )}
     </BlockShell>
   );
 }

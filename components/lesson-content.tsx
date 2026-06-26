@@ -1,6 +1,7 @@
 import {
   ApplicationBlock,
   CaseStudy,
+  ChallengeExercise,
   CoreLesson,
   DidYouKnow,
   ImportantNote,
@@ -33,6 +34,7 @@ const primarySections = new Set([
   "common beginner mistakes",
   "analyst's notebook",
   "wall street minute",
+  "challenge exercise",
   "looking ahead",
 ]);
 
@@ -175,6 +177,10 @@ export function LessonContent({ content }: { content: string }) {
 
         if (normalized === "wall street minute") {
           return <DidYouKnow key={key}>{section.body}</DidYouKnow>;
+        }
+
+        if (normalized === "challenge exercise") {
+          return <ChallengeExercise key={key} title={section.title}>{section.body}</ChallengeExercise>;
         }
 
         if (normalized === "looking ahead") {
