@@ -34,6 +34,15 @@ function removeFirstHeading(markdown: string) {
   return markdown.trimStart().replace(/^#\s+.+(?:\r?\n)+/, "").trim();
 }
 
+function removeLessonChrome(markdown: string) {
+  return markdown
+    .replace(/^`{3,}[a-z]*\s*$/gim, "")
+    .replace(/^\s*-{3,}\s*\n\s*\*\*(?:[^*\n]+)?End of (?:Lesson|Course)[^*\n]*\*\*\s*$/gim, "")
+    .replace(/^\s*\*\*(?:[^*\n]+)?End of (?:Lesson|Course)[^*\n]*\*\*\s*$/gim, "")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
 function getHeadingSection(markdown: string, heading: string) {
   const escaped = heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   const match = new RegExp(`^(#{1,6})\\s+${escaped}\\s*$`, "im").exec(markdown);
@@ -104,7 +113,7 @@ function loadAvailableLessons(courseSlug: string): Map<number, Lesson> {
     const parsed = matter(raw);
     const numberMatch = filename.match(/lesson-(\d+)/);
     const number = Number(numberMatch?.[1] ?? 0);
-    const content = removeFirstHeading(parsed.content);
+    const content = removeLessonChrome(removeFirstHeading(parsed.content));
     const title = typeof parsed.data.title === "string" ? parsed.data.title.trim() : "";
     const lessonId = typeof parsed.data.lesson_id === "string" ? parsed.data.lesson_id.trim() : "";
 

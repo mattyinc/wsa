@@ -124,6 +124,13 @@ Do not invent finance content unless implementing placeholders.
 
 If content is missing, use elegant placeholders and clearly mark them as placeholders.
 
+When Markdown presents comparative material, such as Option A versus Option B, Country A versus Country B, borrower/investor scenarios, or balance-sheet entries, preserve the Markdown as the source of truth but render it with an appropriate structured UI:
+
+- use side-by-side comparison panels for conceptual A/B comparisons
+- use actual styled tables for tabular data
+- avoid leaving comparison content as a long prose paragraph when structure would improve learning
+- strip generated lesson chrome such as "End of Lesson" markers from the rendered reading experience
+
 ---
 
 ## Component Philosophy

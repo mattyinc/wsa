@@ -1452,10 +1452,10 @@ a.lesson-link:hover {
 
 .comparison-grid {
   max-width: 860px;
-  margin: 1.45rem 0 0;
+  margin: 1rem 0 0;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
+  gap: 0.9rem;
 }
 
 .comparison-card {
@@ -1470,12 +1470,13 @@ a.lesson-link:hover {
   margin: 0 0 0.85rem;
   padding-bottom: 0.7rem;
   border-bottom: 1px solid var(--line);
-  color: var(--ink);
-  font-family: var(--font-serif), serif;
-  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
-  font-weight: 650;
-  letter-spacing: 0;
-  line-height: 1.15;
+  color: var(--gold-dark);
+  font-family: var(--font-sans), sans-serif;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  line-height: 1;
+  text-transform: uppercase;
 }
 
 .comparison-card .prose {
@@ -1494,6 +1495,20 @@ a.lesson-link:hover {
 
 .comparison-card .prose p:first-child {
   margin-top: 0;
+}
+
+.comparison-card .prose p {
+  margin: 0.55rem 0 0;
+}
+
+.comparison-copy {
+  max-width: 720px;
+}
+
+.comparison-grid + .comparison-copy,
+.comparison-copy + .comparison-grid,
+.comparison-grid + .comparison-grid {
+  margin-top: 1.15rem;
 }
 
 .comparison-prompt {
