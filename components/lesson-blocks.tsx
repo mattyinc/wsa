@@ -16,6 +16,7 @@ import {
 import type { ReactNode } from "react";
 import { ComparisonLayout, parseComparisonSections } from "./comparison-content";
 import { MarkdownRenderer } from "./markdown-renderer";
+import { findIcon } from "@/lib/icons";
 
 function BlockShell({
   children,
@@ -119,6 +120,7 @@ export function Think({ prompt }: { prompt: string }) {
 
 export function MentalModelBlock({ children, title }: { children: string; title: string }) {
   const comparison = parseComparisonSections(children, { exactSectionCount: 2 });
+  const DetectedIcon = findIcon(`${title} ${children}`) ?? Brain;
 
   return (
     <BlockShell
@@ -128,9 +130,7 @@ export function MentalModelBlock({ children, title }: { children: string; title:
       title={title}
     >
       <div className="mental-illustration" aria-hidden="true">
-        <span />
-        <i />
-        <b />
+        <DetectedIcon />
       </div>
       {comparison ? (
         <ComparisonLayout comparison={comparison} />

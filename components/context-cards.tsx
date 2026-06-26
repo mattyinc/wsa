@@ -1,5 +1,6 @@
 import { Compass, Lightbulb } from "lucide-react";
 import { MarkdownRenderer } from "./markdown-renderer";
+import { findIcon } from "@/lib/icons";
 
 export function MentorNote({ content }: { content: string }) {
   if (!content) return null;
@@ -16,10 +17,11 @@ export function MentorNote({ content }: { content: string }) {
 
 export function MentalModelCard({ content }: { content: string }) {
   if (!content) return null;
+  const TitleIcon = findIcon(content) ?? Lightbulb;
   return (
     <aside className="context-card mental-model">
       <div className="context-card__title">
-        <Lightbulb aria-hidden="true" />
+        <TitleIcon aria-hidden="true" />
         <span>Mental model</span>
       </div>
       <MarkdownRenderer content={content} compact />
