@@ -1,0 +1,12 @@
+node_modules
+.next
+.codex
+out
+public/fonts/*.otf
+public/fonts/*.ttf
+public/fonts/*.woff
+public/fonts/*.woff2
+.DS_Store
+*.log
+.env*
+!.env.example
