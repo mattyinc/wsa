@@ -26,7 +26,7 @@ import {
   Zap,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import type { ReactNode } from "react";
+import React, { type ReactNode } from "react";
 import type { Components } from "react-markdown";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -97,8 +97,8 @@ function getTextContent(node: ReactNode): string {
   if (typeof node === "string") return node;
   if (typeof node === "number") return String(node);
   if (Array.isArray(node)) return node.map(getTextContent).join("");
-  if (node && typeof node === "object" && "props" in (node as object)) {
-    return getTextContent((node as React.ReactElement).props.children);
+  if (React.isValidElement(node)) {
+    return getTextContent((node.props as { children?: ReactNode }).children);
   }
   return "";
 }
