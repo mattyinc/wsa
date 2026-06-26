@@ -9,6 +9,13 @@ import { LessonContent } from "@/components/lesson-content";
 import { ProgressIndicator } from "@/components/progress-indicator";
 import { getCourse } from "@/lib/content";
 
+export function generateStaticParams() {
+  const course = getCourse();
+  return course.lessons
+    .filter((l) => l.available && l.mainContent)
+    .map((l) => ({ courseId: course.slug, lessonId: l.slug }));
+}
+
 export default async function LessonPage({
   params,
 }: {

@@ -4,6 +4,10 @@ import { MarkdownRenderer } from "@/components/markdown-renderer";
 import { ProgressIndicator } from "@/components/progress-indicator";
 import { getCourse } from "@/lib/content";
 
+export function generateStaticParams() {
+  return [{ courseId: getCourse().slug }];
+}
+
 export default async function CoursePage({
   params,
 }: {
