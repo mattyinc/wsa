@@ -1,6 +1,5 @@
-import { ArrowRight, Clock3 } from "lucide-react";
-import Link from "next/link";
 import { notFound } from "next/navigation";
+import { CourseSyllabus } from "@/components/course-syllabus";
 import { MarkdownRenderer } from "@/components/markdown-renderer";
 import { ProgressIndicator } from "@/components/progress-indicator";
 import { getCourse } from "@/lib/content";
@@ -22,7 +21,7 @@ export default async function CoursePage({
           <h1>{course.title}</h1>
           <p>{course.subtitle}</p>
         </div>
-        <ProgressIndicator totalCount={course.lessons.length} />
+        <ProgressIndicator totalCount={course.lessons.length} lessons={course.lessons} />
       </header>
 
       <section className="course-introduction">
@@ -53,30 +52,7 @@ export default async function CoursePage({
             <h2>Ten lessons in sequence</h2>
           </div>
         </div>
-        <ol>
-          {course.lessons.map((lesson) => (
-            <li key={lesson.lessonId} className={lesson.available ? "" : "is-planned"}>
-              <span>{String(lesson.number).padStart(2, "0")}</span>
-              <div>
-                <h3>{lesson.title}</h3>
-                <p>{lesson.description}</p>
-              </div>
-              {lesson.available ? (
-                <Link
-                  href={`/courses/${course.slug}/lessons/${lesson.slug}`}
-                  aria-label={`Open ${lesson.title}`}
-                >
-                  <span>{lesson.readingTime}</span>
-                  <ArrowRight aria-hidden="true" />
-                </Link>
-              ) : (
-                <span className="planned-label">
-                  <Clock3 aria-hidden="true" /> Planned
-                </span>
-              )}
-            </li>
-          ))}
-        </ol>
+        <CourseSyllabus course={course} />
       </section>
     </main>
   );

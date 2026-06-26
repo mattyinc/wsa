@@ -3,14 +3,17 @@
 import { ArrowRight, BookOpenText } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { getCourseCompletedCount, getNextUnlockedLesson } from "@/lib/progress";
 import { readCompletedLessons } from "@/lib/storage";
 import type { Course } from "@/lib/types";
 
 export function CourseCard({ course }: { course: Course }) {
-  const [completed, setCompleted] = useState(0);
-  useEffect(() => setCompleted(readCompletedLessons().length), []);
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+  useEffect(() => setCompletedLessons(readCompletedLessons()), []);
 
-  const firstLesson = course.lessons.find((lesson) => lesson.available);
+  const completed = getCourseCompletedCount(course.lessons, completedLessons);
+  const nextLesson = getNextUnlockedLesson(course.lessons, completedLessons);
+  const firstLesson = nextLesson ?? course.lessons.find((lesson) => lesson.available);
   const progress = Math.round((completed / course.lessons.length) * 100);
 
   return (

@@ -2,6 +2,7 @@ export type Lesson = {
   slug: string;
   number: number;
   title: string;
+  subtitle?: string;
   description: string;
   lessonId: string;
   status: string;

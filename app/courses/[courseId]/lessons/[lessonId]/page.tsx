@@ -5,7 +5,7 @@ import { AnalystNotebook } from "@/components/analyst-notebook";
 import { AssignmentPanel } from "@/components/assignment-panel";
 import { CourseSidebar } from "@/components/course-sidebar";
 import { MentalModelCard, MentorNote } from "@/components/context-cards";
-import { MarkdownRenderer } from "@/components/markdown-renderer";
+import { LessonContent } from "@/components/lesson-content";
 import { ProgressIndicator } from "@/components/progress-indicator";
 import { getCourse } from "@/lib/content";
 
@@ -56,16 +56,17 @@ export default async function LessonPage({
             ) : null}
           </div>
           <h1>{lesson.title}</h1>
-          <p>{course.subtitle}</p>
+          <p>{lesson.subtitle ?? course.subtitle}</p>
         </header>
 
-        <MarkdownRenderer content={lesson.mainContent} />
+        <LessonContent content={lesson.mainContent} />
 
         <div className="lesson-mobile-progress">
           <ProgressIndicator
             lessonId={lesson.lessonId}
             totalCount={course.lessons.length}
             nextHref={nextHref}
+            lessons={course.lessons}
           />
         </div>
 
@@ -125,6 +126,7 @@ export default async function LessonPage({
           lessonId={lesson.lessonId}
           totalCount={course.lessons.length}
           nextHref={nextHref}
+          lessons={course.lessons}
         />
         <MentalModelCard content={lesson.mentalModel ?? ""} />
         <MentorNote content={lesson.mentorNote ?? ""} />

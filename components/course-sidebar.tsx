@@ -1,5 +1,10 @@
+"use client";
+
 import { Check, LockKeyhole } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { isLessonUnlocked } from "@/lib/progress";
+import { readCompletedLessons, STORAGE_KEYS } from "@/lib/storage";
 import type { Course } from "@/lib/types";
 
 export function CourseSidebar({
@@ -9,6 +14,21 @@ export function CourseSidebar({
   course: Course;
   activeLessonId?: string;
 }) {
+  const [completedLessons, setCompletedLessons] = useState<string[]>([]);
+
+  useEffect(() => {
+    function syncCompletedLessons() {
+      setCompletedLessons(readCompletedLessons());
+    }
+
+    syncCompletedLessons();
+    window.addEventListener(STORAGE_KEYS.completedLessons, syncCompletedLessons);
+
+    return () => {
+      window.removeEventListener(STORAGE_KEYS.completedLessons, syncCompletedLessons);
+    };
+  }, []);
+
   return (
     <nav className="course-sidebar" aria-label={`${course.title} lessons`}>
       <p className="eyebrow">Course 01</p>
@@ -16,9 +36,10 @@ export function CourseSidebar({
       <ol>
         {course.lessons.map((lesson) => {
           const active = lesson.lessonId === activeLessonId;
+          const unlocked = active || isLessonUnlocked(course.lessons, lesson, completedLessons);
           return (
             <li key={lesson.lessonId}>
-              {lesson.available ? (
+              {unlocked ? (
                 <Link
                   href={`/courses/${course.slug}/lessons/${lesson.slug}`}
                   className={active ? "lesson-link is-active" : "lesson-link"}

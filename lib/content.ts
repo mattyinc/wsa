@@ -31,7 +31,39 @@ function getSection(markdown: string, heading: string) {
 }
 
 function removeFirstHeading(markdown: string) {
-  return markdown.replace(/^#\s+.+(?:\r?\n)+/, "").trim();
+  return markdown.trimStart().replace(/^#\s+.+(?:\r?\n)+/, "").trim();
+}
+
+function getHeadingSection(markdown: string, heading: string) {
+  const escaped = heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const match = new RegExp(`^(#{1,6})\\s+${escaped}\\s*$`, "im").exec(markdown);
+  if (!match) return "";
+
+  const level = match[1].length;
+  const start = match.index + match[0].length;
+  const headingPattern = /^(#{1,6})\s+.+$/gm;
+  headingPattern.lastIndex = start;
+
+  let next = headingPattern.exec(markdown);
+  while (next && next[1].length > level) {
+    next = headingPattern.exec(markdown);
+  }
+
+  return markdown.slice(start, next ? next.index : undefined).trim();
+}
+
+function stripSectionChrome(markdown: string) {
+  return markdown
+    .replace(/^\s*-{3,}\s*/, "")
+    .replace(/\s*-{3,}\s*$/, "")
+    .trim();
+}
+
+function getPlainText(markdown: string) {
+  return stripSectionChrome(markdown)
+    .replace(/[*_`~]/g, "")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .trim();
 }
 
 function parseBlueprintLessons(markdown: string, courseId: string): Lesson[] {
@@ -73,28 +105,21 @@ function loadAvailableLessons(courseSlug: string): Map<number, Lesson> {
     const numberMatch = filename.match(/lesson-(\d+)/);
     const number = Number(numberMatch?.[1] ?? 0);
     const content = removeFirstHeading(parsed.content);
-    const assignmentHeading = /^#\s+Analyst's Notebook\s*$/im;
-    const assignmentIndex = content.search(assignmentHeading);
-    const mainContent =
-      assignmentIndex >= 0 ? content.slice(0, assignmentIndex).trim() : content;
-    const assignmentContent =
-      assignmentIndex >= 0
-        ? content
-            .slice(assignmentIndex)
-            .replace(assignmentHeading, "")
-            .trim()
-        : "";
+    const assignmentContent = stripSectionChrome(
+      getHeadingSection(content, "Analyst's Notebook"),
+    );
 
     lessons.set(number, {
       slug: filename.replace(/\.md$/, ""),
       number,
       title: String(parsed.data.title),
+      subtitle: getPlainText(getHeadingSection(content, "Subtitle")) || undefined,
       description: "",
       lessonId: String(parsed.data.lesson_id),
       status: String(parsed.data.status ?? "Draft"),
       readingTime: String(parsed.data.estimated_reading_time ?? ""),
       content,
-      mainContent,
+      mainContent: content,
       assignmentContent,
       mentalModel: getSection(parsed.content, "Mental Model"),
       mentorNote: getSection(parsed.content, "Wall Street Perspective"),
