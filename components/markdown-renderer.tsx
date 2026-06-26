@@ -39,7 +39,7 @@ const baseComponents: Components = {
   ),
   blockquote: ({ children }) => (
     <blockquote>
-      <span aria-hidden="true">"</span>
+      <span aria-hidden="true">{'“'}</span>
       <div>{children}</div>
     </blockquote>
   ),
