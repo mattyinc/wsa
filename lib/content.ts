@@ -105,6 +105,11 @@ function loadAvailableLessons(courseSlug: string): Map<number, Lesson> {
     const numberMatch = filename.match(/lesson-(\d+)/);
     const number = Number(numberMatch?.[1] ?? 0);
     const content = removeFirstHeading(parsed.content);
+    const title = typeof parsed.data.title === "string" ? parsed.data.title.trim() : "";
+    const lessonId = typeof parsed.data.lesson_id === "string" ? parsed.data.lesson_id.trim() : "";
+
+    if (!number || !title || !lessonId || !content.trim()) continue;
+
     const assignmentContent = stripSectionChrome(
       getHeadingSection(content, "Analyst's Notebook"),
     );
@@ -112,10 +117,10 @@ function loadAvailableLessons(courseSlug: string): Map<number, Lesson> {
     lessons.set(number, {
       slug: filename.replace(/\.md$/, ""),
       number,
-      title: String(parsed.data.title),
+      title,
       subtitle: getPlainText(getHeadingSection(content, "Subtitle")) || undefined,
       description: "",
-      lessonId: String(parsed.data.lesson_id),
+      lessonId,
       status: String(parsed.data.status ?? "Draft"),
       readingTime: String(parsed.data.estimated_reading_time ?? ""),
       content,
