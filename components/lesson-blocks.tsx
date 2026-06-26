@@ -53,7 +53,7 @@ export function Question({ children }: { children: string }) {
         <CircleHelp aria-hidden="true" />
         <span>Opening question</span>
       </div>
-      <MarkdownRenderer content={children} compact editorial />
+      <MarkdownRenderer content={children} compact editorial iconLists />
     </section>
   );
 }
@@ -67,7 +67,7 @@ export function Story({ children, title }: { children: string; title: string }) 
       showKicker={false}
       title={title}
     >
-      <MarkdownRenderer content={children} compact editorial />
+      <MarkdownRenderer content={children} compact editorial iconLists />
     </BlockShell>
   );
 }
@@ -80,7 +80,7 @@ export function ImportantNote({ children, title }: { children: string; title: st
       label="Important note"
       title={title}
     >
-      <MarkdownRenderer content={children} compact editorial />
+      <MarkdownRenderer content={children} compact editorial iconLists />
     </BlockShell>
   );
 }
@@ -99,7 +99,7 @@ export function CoreLesson({ children, title }: { children: string; title: strin
       {comparison ? (
         <ComparisonLayout comparison={comparison} />
       ) : (
-        <MarkdownRenderer content={children} compact editorial />
+        <MarkdownRenderer content={children} compact editorial iconLists />
       )}
     </BlockShell>
   );
@@ -135,7 +135,7 @@ export function MentalModelBlock({ children, title }: { children: string; title:
       {comparison ? (
         <ComparisonLayout comparison={comparison} />
       ) : (
-        <MarkdownRenderer content={children} compact editorial />
+        <MarkdownRenderer content={children} compact editorial iconLists />
       )}
     </BlockShell>
   );
@@ -149,7 +149,7 @@ export function WallStreetPerspective({ children }: { children: string }) {
       label="Wall Street perspective"
       title="How professionals think"
     >
-      <MarkdownRenderer content={children} compact editorial />
+      <MarkdownRenderer content={children} compact editorial iconLists />
     </BlockShell>
   );
 }
@@ -168,7 +168,7 @@ export function CaseStudy({ children, title }: { children: string; title: string
           <span>Compare</span>
           <span>Conclude</span>
         </div>
-        <MarkdownRenderer content={children} compact editorial />
+        <MarkdownRenderer content={children} compact editorial iconLists />
       </div>
     </BlockShell>
   );
@@ -183,7 +183,7 @@ export function ApplicationBlock({ children, title }: { children: string; title:
       showKicker={false}
       title={title}
     >
-      <MarkdownRenderer content={children} compact editorial />
+      <MarkdownRenderer content={children} compact editorial iconLists />
     </BlockShell>
   );
 }
@@ -202,7 +202,7 @@ export function ChallengeExercise({ children, title }: { children: string; title
       {comparison ? (
         <ComparisonLayout comparison={comparison} />
       ) : (
-        <MarkdownRenderer content={children} compact editorial />
+        <MarkdownRenderer content={children} compact editorial iconLists />
       )}
     </BlockShell>
   );
@@ -217,7 +217,7 @@ export function Watchlist({ children, title }: { children: string; title: string
       showKicker={false}
       title={title}
     >
-      <MarkdownRenderer content={children} compact editorial />
+      <MarkdownRenderer content={children} compact editorial iconLists />
     </BlockShell>
   );
 }
@@ -232,7 +232,7 @@ export function DidYouKnow({ children }: { children: string }) {
         </span>
         <strong>Open the Wall Street minute</strong>
       </summary>
-      <MarkdownRenderer content={children} compact editorial />
+      <MarkdownRenderer content={children} compact editorial iconLists />
     </details>
   );
 }
@@ -246,7 +246,7 @@ export function LookingAhead({ children }: { children: string }) {
       showKicker={false}
       title="What this unlocks next"
     >
-      <MarkdownRenderer content={children} compact editorial />
+      <MarkdownRenderer content={children} compact editorial iconLists />
     </BlockShell>
   );
 }
